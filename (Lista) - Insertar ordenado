@@ -1,0 +1,73 @@
+//============================================================================
+// Name        : LISTAS.cpp
+// Author      : Limberth Estrada
+// Version     :
+// Copyright   : Your copyright notice
+// Description : Hello World in C++, Ansi-style
+//============================================================================
+
+#include <iostream>
+using namespace std;
+
+struct tInfo{
+   int codigoID;
+   int numero;
+};
+
+struct Nodo{
+   tInfo INFO;
+   Nodo* sig;
+};
+
+void insertarOrdenado(Nodo* lista, tInfo INFO){
+   Nodo* ptrnue;
+   Nodo* aux = lista; //Es un auxiliar de lista y lo voy a usar para hacer mi recorrido
+   Nodo* ant = NULL; //Porque aun no sabemos nada sobre su posicion hablando en terminos de nodos
+
+   ptrnue = new Nodo();
+   ptrnue ->INFO = INFO;
+   ptrnue ->sig = NULL;
+
+
+   while(aux != NULL && aux->INFO.codigoID < INFO.codigoID) //Si no hago el recorrido nunca podre hacer mi ordenamiento. Necesito tener la info de todos los nodos para hacer el ordenamietno
+   {
+      ant = aux;
+      aux = aux -> sig;
+   }
+
+   if (ant == NULL) { //Osea si la lista esta vacia
+      lista = ptrnue; //Hago que lista deje de apuntar a null para que pase a apuntar al nodo recien creado
+   }
+   else{
+     ant ->sig = ptrnue; //Aca hago el enlace del anterior con el nodo recien creado
+   }
+   ptrnue ->sig = aux; //Aca uno el nodo recien creado con el nodo siguiente no con el nodo anterior
+} //Probar con ptrnue = aux
+
+void sacar(Nodo* & lista, tInfo & INFOX){
+   INFOX = lista->INFO;
+   Nodo* aux = lista;
+   lista = lista->sig;
+   delete aux;
+}
+int main() {
+	Nodo* lista = NULL;
+	tInfo infox;
+tInfo datosAGuardar;
+	cout << "Ingrese el codigo (cero para cortar)" << endl;
+	   cin >> infox.codigoID;
+	   while(infox.codigoID != 0){ //Acá llenaremos la pila
+	      cout << "Ingrese el numero:" << endl;
+	      cin >> infox.numero;
+	      insertarOrdenado(lista, infox);
+	      cout << "Ingrese el codigo (cero para cortar)" << endl;
+	      cin >> infox.codigoID;
+	   }
+
+	   while(lista != NULL){
+	      sacar(lista, datosAGuardar);
+	      cout << "Codigo: " << datosAGuardar.codigoID << "  Número: " << datosAGuardar.numero << endl;
+	   }
+
+	return 0;
+}
